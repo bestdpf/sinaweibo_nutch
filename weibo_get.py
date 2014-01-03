@@ -15,6 +15,7 @@ abit=bitarray(n)
 abit.setall(False)
 with open('succ.txt','r') as f:
     for line in f:
+        #print line
         abit[get_mod(int(line))]=True
 
 start_id=1748122191
@@ -22,7 +23,8 @@ qu=deque()
 qu.append(start_id)
 with open('unfinish.txt','r') as f:
     for line in f:
-        qu.append(int(line))
+        if not abit[get_mod(int(line))]:
+            qu.append(int(line))
 
 #magic token ^_^
 oauth_token='2.00N8wSuB05_4UJ6f4f7a6937VtKvvC'
@@ -110,8 +112,7 @@ while qu:
     except:
         print 'except happens'
         f_unfinish=open('unfinish.txt','w')
-        for i in qu:
-            f_unfinish.write(str(i)+'\n')
+        f_unfinish.write(str(it)+'\n')
         f_unfinish.close()
     finally:
         f_fr.close()
