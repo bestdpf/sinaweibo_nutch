@@ -3,8 +3,10 @@ from weibo import APIClient
 import json
 import io
 import os
+import time
 from collections import *
 from bitarray import *
+import sys
 
 n=10000000
 
@@ -25,6 +27,11 @@ with open('unfinish.txt','r') as f:
     for line in f:
         if not abit[get_mod(int(line))]:
             qu.append(int(line))
+            
+with open('fail.txt','r') as f:
+    for line in f:
+        if not abit[get_mod(int(line))]:
+            qu.append(int(line))
 
 #magic token ^_^
 oauth_token='2.00N8wSuB05_4UJ6f4f7a6937VtKvvC'
@@ -37,7 +44,7 @@ while qu:
     if abit[get_mod(it)]:
         print '{0} is skipped for hash hitting'.format(it)
         continue
-    print 'get {0} \'s info'.format(it)
+    print 'get {0} \'s info at {1}'.format(it,time.time())
     abit[get_mod(it)]=True
     if not os.path.exists(str(it)):
         os.mkdir(str(it))
@@ -109,11 +116,19 @@ while qu:
         f_career.close()
         f_succ=open('succ.txt','ab')
         f_succ.write(str(it)+'\n')
-    except:
-        print 'except happens'
+    except KeyboardInterrupt:
+        print 'saving the workspace now'
         f_unfinish=open('unfinish.txt','w')
         f_unfinish.write(str(it)+'\n')
+        for i in qu:
+            f_unfinish.write(str(i)+'\n')
         f_unfinish.close()
+        sys.exit(0)
+    except:
+        print 'except happens'
+        f_fail=open('fail.txt','w')
+        f_fail.write(str(it)+'\n')
+        f_fail.close()
     finally:
         f_fr.close()
         f_timeline.close()
